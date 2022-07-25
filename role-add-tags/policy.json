@@ -1,0 +1,53 @@
+{
+    "properties": {
+        "displayName": "tagging policy",
+        "description": "all indexed resources in your subscription have tags and deny deployment if they do not",
+        "policyType": "Custom",
+        "mode": "indexed",
+        "metadata": {
+            "version": "1.0.0",
+            "category": "Tags"
+          },
+        "parameters": {
+            "tagName": {
+                "type": "String",
+                "metadata": {
+                  "displayName": "Tag Name",
+                  "description": "Name of the tag, such as 'Environment'"
+                }
+            },
+            "tagValue": {
+                "type": "Array",
+                "metadata": {
+                    "displayName": "Tag Value",
+                    "description": "Value of the tag, such as 'Dev'"
+                }
+            },
+            "allowedValues": [
+                "Dev",
+                "Test",
+                "Prod"
+              ]
+        },
+        "policyRule": {
+            "if": {
+                "allOf": [{
+                        "not":{
+                        "field": "[concat('tags[', parameters('tagName'), ']')]",
+                        "in": "[parameters('tagValue')]"
+                        }
+                    },
+                    {
+                        "not":{
+                        "field": "type",
+                        "equals": "Microsoft.Resources/subscriptions"
+                        }
+                    }
+                ]
+            },
+            "then": {
+                "effect": "deny"
+            }
+        }
+    }
+}

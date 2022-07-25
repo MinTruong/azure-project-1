@@ -1,0 +1,7 @@
+export ARM_CLIENT_ID="84ab2017-f34a-430d-ad59-2512adce641f"
+export ARM_CLIENT_SECRET="zw58Q~Bdpb56GfjToIzcWPnMmNtvpDFbCQq5Jbut"
+export ARM_TENANT_ID="f958e84a-92b8-439f-a62d-4f45996b6d07"
+export ARM_SUBSCRIPTION_ID="951acc8d-ddfd-4222-a2f1-9a78163d93ff"
+export ARM_RESOURCE_GROUP_NAME="Azuredevops"
+export ARM_LOCATION="East US"
+
