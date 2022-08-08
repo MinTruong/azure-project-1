@@ -1,16 +1,15 @@
 {
-    "if": {
-      "allOf": [{
-        "field": "[concat('tags[', parameters('tagName'), ']')]",
-        "notEquals": "[parameters('tagValue')]"
-        },
-        {
-        "field": "type",
-        "equals": "Microsoft.Resources/subscriptions"            
-        }
-      ] 
-    },
-    "then": {
-      "effect": "deny"
-    }
+  "if": {
+    "not":{
+      "field": "[concat('tags[', parameters('tagName'), ']')]",
+      "notIn":[
+        "Test",
+        "Dev",
+        "Prod"
+      ]
+    } 
+  },
+  "then": {
+    "effect": "deny"
+  }
 }

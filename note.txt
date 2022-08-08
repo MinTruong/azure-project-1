@@ -26,30 +26,17 @@ az vm create \
 
 az policy assignment create --name MyPolicyAddTags --subscription "5575e80b-f0da-4822-a386-38229fd50c58"
 
-[
-  {
-    "cloudName": "AzureCloud",
-    "homeTenantId": "f958e84a-92b8-439f-a62d-4f45996b6d07",
-    "id": "5575e80b-f0da-4822-a386-38229fd50c58",
-    "isDefault": true,
-    "managedByTenants": [],
-    "name": "UdacityDS - 09",
-    "state": "Enabled",
-    "tenantId": "f958e84a-92b8-439f-a62d-4f45996b6d07",    
-    "user": {
-      "name": "odl_user_201871@udacityhol.onmicrosoft.com",
-      "type": "user"
-    }
-  }
-]
 
-az policy definition create --subscription "7f081a58-7afb-4104-9c5f-5a50e9f860bd" --name tagging-policy --display-name tagging-policy --description "all indexed resources in your subscription have tags and deny deployment if they do not" --mode All --metadata "version"="1.0.1" "category"="Tags" --params "./role-add-tags/policy.parameters.json" --rules "./role-add-tags/policy.rule.json"
+az policy definition create --subscription "90a83934-1b3e-4b32-8146-c2760bbda23b" --name tagging-policy --display-name tagging-policy --description "all indexed resources in your subscription have tags and deny deployment if they do not" --mode All --metadata "version"="1.0.1" "category"="Tags" --params "./role-add-tags/policy.parameters.json" --rules "./role-add-tags/policy.rule.json"
 
-az policy assignment create --name "tagging-policy"
+az policy assignment create --subscription "c5deb3d5-b610-4a6d-a071-e93f7a5350f4" --name tagging-policy --display-name tagging-policy --description "all indexed resources in your subscription have tags and deny deployment if they do not" --mode All --metadata "version"="1.0.1" "category"="Tags" --params "./role-add-tags/policy.parameters.json" --rules "./role-add-tags/policy.rule.json"
 
-az policy definition update --subscription "7f081a58-7afb-4104-9c5f-5a50e9f860bd" --name tagging-policy --display-name tagging-policy --description "all indexed resources in your subscription have tags and deny deployment if they do not" --mode Indexed --metadata "version"="1.0.1" "category"="Tags" --params "./role-add-tags/policy.parameters.json" --rules "./role-add-tags/policy.rule.json"
-update 
-az policy assignment create --policy tagging-policy
+
+az policy assignment create -- 
+
+
+
+az policy assignment create --policy tagging-policy --name "tagging-policy"
 
 
 "variables": {
@@ -72,4 +59,8 @@ az policy assignment create --policy tagging-policy
 
 
 
-  az policy definition create --subscription "69298070-9e94-4b5d-a46b-b879a391740c" --name resourceWrite --display-name resourceWrite --description "enable Microsoft.Resources write" --mode All --metadata "version"="1.0.1" --rules "./role-Resource/policy.rule.json"
+  az policy definition create --subscription "c5deb3d5-b610-4a6d-a071-e93f7a5350f4" --name resourceWrite --display-name resourceWrite --description "enable Microsoft.Resources write" --mode All --metadata "version"="1.0.1" --rules "./role-Resource/policy.rule.json"
+
+  az ad sp create-for-rbac --role Contributor --scopes "/subscriptions/58f9282b-c51d-42f6-bec0-469e53db5a7a" --query "{ client_id: '4cb544d5-21cf-4ca1-91db-33aee11d410d', client_secret: 'PAa8Q~CyphcIlHZv1BxVgeQqUJmA3lVkN8CNmb~Y', tenant_id: 'fbaf8b22-17d2-42ae-a2cf-f7669729011b' }"
+
+  az ad sp create-for-rbac --role Contributor --scopes /subscriptions/58f9282b-c51d-42f6-bec0-469e53db5a7a --query "{ client_id: appId, client_secret: password, tenant_id: tenant }"
