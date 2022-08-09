@@ -41,8 +41,9 @@ resource "azurerm_subnet" "SubnetA" {
 #                     interface-NIC                            #
 ################################################################
 // This interface is for appvm1
-resource "azurerm_network_interface" "app_interface1" {
-  name                = "app-interface1"
+resource "azurerm_network_interface" "app_interface" {
+  count = var.counter
+  name                = "app-interface-${count.index}"
   location            = var.location
   resource_group_name = var.resource_group
 
@@ -58,23 +59,6 @@ resource "azurerm_network_interface" "app_interface1" {
   ]
 }
 
-// This interface is for appvm2
-resource "azurerm_network_interface" "app_interface2" {
-  name                = "app-interface2"
-  location            = var.location
-  resource_group_name = var.resource_group
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.SubnetA.id
-    private_ip_address_allocation = "Dynamic"    
-  }
-
-  depends_on = [
-    azurerm_virtual_network.app_network,
-    azurerm_subnet.SubnetA
-  ]
-}
 ################################################################
 #                     Load Balancer                            #
 ################################################################
@@ -168,21 +152,13 @@ resource "azurerm_subnet_network_security_group_association" "nsg_association" {
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "backendApp1" {
-  network_interface_id    = azurerm_network_interface.app_interface1.id
+  count = var.counter
+  network_interface_id    = element(azurerm_network_interface.app_interface.*.id, count.index)
   ip_configuration_name   = "internal"
   backend_address_pool_id = azurerm_lb_backend_address_pool.backendApp.id
+  
   depends_on = [
-    azurerm_network_interface.app_interface1,
-    azurerm_lb.myLoadBalance,
-    azurerm_lb_backend_address_pool.backendApp
-  ]
-}
-resource "azurerm_network_interface_backend_address_pool_association" "backendApp2" {
-  network_interface_id    = azurerm_network_interface.app_interface2.id
-  ip_configuration_name   = "internal"
-  backend_address_pool_id = azurerm_lb_backend_address_pool.backendApp.id
-  depends_on = [
-    azurerm_network_interface.app_interface2,
+    azurerm_network_interface.app_interface,
     azurerm_lb.myLoadBalance,
     azurerm_lb_backend_address_pool.backendApp
   ]
@@ -201,15 +177,19 @@ resource "azurerm_availability_set" "app_set" {
 ################################################################
 #                     Virtual Machine                          #
 ################################################################
-resource "azurerm_virtual_machine" "app_vm1" {
-  name                  = "app_vm1"
+resource "azurerm_virtual_machine" "app_vm" {
+  count = var.count
+  name                  = "app_vm-${count.index}"
   location              = var.location
   resource_group_name   = var.resource_group
-  network_interface_ids = ["${azurerm_network_interface.app_interface1.id}"]
   vm_size               = "Standard_DS1_v2"
   availability_set_id = azurerm_availability_set.app_set.id
+  network_interface_ids = [
+    azurerm_network_interface.app_interface[count.index].id,
+  ]
   # This means the OS Disk will be deleted when Terraform destroys the Virtual Machine
   # NOTE: This may not be optimal in all cases.
+
   delete_os_disk_on_termination = true
 
   storage_image_reference {
@@ -217,7 +197,7 @@ resource "azurerm_virtual_machine" "app_vm1" {
   }
 
   storage_os_disk {
-    name              = "osdisk-1"
+    name              = "osdisk-${count.index}"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Standard_LRS"

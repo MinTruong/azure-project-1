@@ -21,3 +21,8 @@ variable "password" {
   description = "password of MC"
   default = "Azuredevops@1ww9"
 }
+
+variable "counter" {
+  description = "number of resources VM"
+  default = 2
+}
