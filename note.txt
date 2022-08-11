@@ -24,43 +24,15 @@ az vm create \
 --output json \
 --verbose
 
-az policy assignment create --name MyPolicyAddTags --subscription "5575e80b-f0da-4822-a386-38229fd50c58"
 
 
-az policy definition create --subscription "90a83934-1b3e-4b32-8146-c2760bbda23b" --name tagging-policy --display-name tagging-policy --description "all indexed resources in your subscription have tags and deny deployment if they do not" --mode All --metadata "version"="1.0.1" "category"="Tags" --params "./role-add-tags/policy.parameters.json" --rules "./role-add-tags/policy.rule.json"
 
-az policy assignment create --subscription "c5deb3d5-b610-4a6d-a071-e93f7a5350f4" --name tagging-policy --display-name tagging-policy --description "all indexed resources in your subscription have tags and deny deployment if they do not" --mode All --metadata "version"="1.0.1" "category"="Tags" --params "./role-add-tags/policy.parameters.json" --rules "./role-add-tags/policy.rule.json"
-
-
-az policy assignment create -- 
-
+az policy definition create --subscription "82c40d1f-be09-4c9e-9295-ae70e625b7b5" --name tagging-policy --display-name tagging-policy --description "all indexed resources in your subscription have tags and deny deployment if they do not" --mode All --metadata "version"="1.0.1" "category"="Tags" --params "./role-add-tags/policy.parameters.json" --rules "./role-add-tags/policy.rule.json"
 
 
 az policy assignment create --policy tagging-policy --name "tagging-policy"
 
 
-"variables": {
-		"client_id": "{{env `ARM_CLIENT_ID`}}",
-		"client_secret": "{{env `ARM_CLIENT_SECRET`}}",
-		"subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}"
-	},
 
 
-  "client_id": "{{user `client_id`}}",
-  "client_secret": "{{user `client_secret`}}",
-  "subscription_id": "{{user `subscription_id`}}",
-
-
-  az ad sp create-for-rbac --role Contributor --scopes /subscriptions/7f081a58-7afb-4104-9c5f-5a50e9f860bd --query "{ client_id: appId, client_secret: password, tenant_id: tenant }"
-
-
-
-
-
-
-
-  az policy definition create --subscription "c5deb3d5-b610-4a6d-a071-e93f7a5350f4" --name resourceWrite --display-name resourceWrite --description "enable Microsoft.Resources write" --mode All --metadata "version"="1.0.1" --rules "./role-Resource/policy.rule.json"
-
-  az ad sp create-for-rbac --role Contributor --scopes "/subscriptions/58f9282b-c51d-42f6-bec0-469e53db5a7a" --query "{ client_id: '4cb544d5-21cf-4ca1-91db-33aee11d410d', client_secret: 'PAa8Q~CyphcIlHZv1BxVgeQqUJmA3lVkN8CNmb~Y', tenant_id: 'fbaf8b22-17d2-42ae-a2cf-f7669729011b' }"
-
-  az ad sp create-for-rbac --role Contributor --scopes /subscriptions/58f9282b-c51d-42f6-bec0-469e53db5a7a --query "{ client_id: appId, client_secret: password, tenant_id: tenant }"
+ 
